@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -7,7 +8,6 @@ import java.util.Scanner;
  * @author Matheus Patrick
  */
 public class Main {
-
     public static void init() throws IOException {
         System.out.println("------------------------------------------------------");
         System.out.println("Seja bem vindo ao Nexus! O que deseja fazer?");
@@ -20,7 +20,7 @@ public class Main {
 
         int opcao = getInt(0);
         LapManager SN = new LapManager();
-        double startTime = -1;
+        long timeStart = -1;
 
         switch (opcao) {
             case 1:
@@ -28,11 +28,11 @@ public class Main {
                 int quantity = getInt(0);
                 System.out.println("Gostaria de visualizar as informacoes das maratonas na tela? (1- Sim, 2- Nao)");
                 int verbose = getInt(0);
-                startTime = System.nanoTime();
+                timeStart = new Date().getTime();
                 SN.generateFiles(quantity, verbose);
                 break;
             case 2:
-                startTime = System.nanoTime();
+                timeStart = new Date().getTime();
                 System.out.println("Gostaria de visualizar as informacoes da criacao do registro na tela? (1- Sim, 2- Nao)");
                 int verbose2 = getInt(0);
                 System.out.println("Qual o tamanho do arquiv (em MB)?  (exemplo: 100 = 100MB)");
@@ -40,7 +40,7 @@ public class Main {
                 SN.generateBigFile(verbose2, fileSize);
                 break;
             case 3:
-                startTime = System.nanoTime();
+                timeStart = new Date().getTime();
                 System.out.println("Qual o tipo de organizacao que voce deseja utilizar? (1 - Codigo, 2 - Nome, 3 - Tempo de corrida, 4 - Data da Corrida)");
                 int indexType = getInt(1);
                 SN.readBigFileIndexedObjects(indexType);
@@ -57,10 +57,9 @@ public class Main {
                 System.out.println("Por favor, digite uma opcao valida!");
                 break;
         }
-        if (startTime != -1) {
-            double endTime = System.nanoTime();
-            double totalTime = (endTime - startTime) / 1e9;
-            System.out.printf("Tempo de processamento: %.2f segundos. \n", totalTime);
+        if (timeStart != -1) {
+            long timeEnd = new Date().getTime();
+            System.out.println("Tempo de processamento: = " + (timeEnd - timeStart) / 1000 + " segundos");
         }
         if (opcao != 0) {
             init();

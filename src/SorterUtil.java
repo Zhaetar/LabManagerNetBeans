@@ -3,7 +3,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -19,39 +18,45 @@ import java.util.TreeSet;
 public class SorterUtil {
 
     public static void main(String[] args) throws Exception {
-
-        long t1 = new Date().getTime();
         int i = 0;
-        Set<String> set = new TreeSet<String>();
-        BufferedReader br = new BufferedReader(new FileReader(new File("C:\\maratona.bin")));
-        String s = br.readLine();
-        while (s != null) {
-            set.add(s);
+        BufferedReader bufferedReader;
+        BufferedWriter bufferedWriter;
+        FileWriter fileWriter;
+        Set<String> set;
+        String line;
+        
+        set = new TreeSet<>();
+        bufferedReader = new BufferedReader(new FileReader(new File("C:\\maratona.bin")));
+        line = bufferedReader.readLine();
+        
+        while (line != null) {
+            set.add(line);
 
             if (set.size() == 60000) {
-                FileWriter fw = new FileWriter(new File("C:\\temp-" + i + ".txt"));
+                FileWriter fw;
+                fw = new FileWriter(new File("C:\\temp-" + i + ".txt"));
                 for (String x : set) {
                     fw.write(x);
                     fw.write("\n");
                 }
                 fw.close();
                 i++;
-                set = new TreeSet<String>();
+                set = new TreeSet<>();
             }
-            s = br.readLine();
+            line = bufferedReader.readLine();
         }
 
-        br.close();
-        br = null;
+        bufferedReader.close();
+        bufferedReader = null;
 
-        FileWriter fw = new FileWriter(new File("C:\\temp-" + i + ".txt"));
+        fileWriter = new FileWriter(new File("C:\\temp-" + i + ".txt"));
         for (String x : set) {
-            fw.write(x);
-            fw.write('\n');
+            fileWriter.write(x);
+            fileWriter.write('\n');
         }
-        fw.close();
+        fileWriter.close();
 
-        Map<String, Integer> map = new TreeMap<String, Integer>();
+        Map<String, Integer> map = new TreeMap<>();
 
         BufferedReader[] brArr = new BufferedReader[i + 1];
         for (int j = 0; j <= i; j++) {
@@ -59,29 +64,26 @@ public class SorterUtil {
             map.put(brArr[j].readLine(), j);
         }
 
-        BufferedWriter bw = new BufferedWriter(new FileWriter(new File("C:\\output.txt")));
+        bufferedWriter = new BufferedWriter(new FileWriter(new File("C:\\output.txt")));
 
         String endofline = "\n";
         while (!map.isEmpty()) {
-            s = map.keySet().iterator().next();
-            i = map.get(s);
-            map.remove(s);
-            bw.write(s);
-            bw.write(endofline);
-            s = brArr[i].readLine();
-            if (s != null) {
-                map.put(s, i);
+            line = map.keySet().iterator().next();
+            i = map.get(line);
+            map.remove(line);
+            bufferedWriter.write(line);
+            bufferedWriter.write(endofline);
+            line = brArr[i].readLine();
+            if (line != null) {
+                map.put(line, i);
             }
         }
-        bw.close();
+        bufferedWriter.close();
 
         for (int j = 0; j < brArr.length; j++) {
             brArr[j].close();
             new File("C:\\temp-" + j + ".txt").delete();
         }
-
-        long t2 = new Date().getTime();
-        System.out.println("Time taken = " + (t2 - t1) / 1000 + " sec");
     }
 
 }
