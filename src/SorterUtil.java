@@ -1,87 +1,99 @@
+
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/**
- * Sort a 400 MB file on a 40MB RAM
- *
- * @author raju rama krishna
- * @see http://javatroops.blogspot.co.nz
- *
- */
 public class SorterUtil {
 
-    public static void main(String[] args) throws Exception {
+    final static String FILE_NAME = "C:\\maratona.bin";
+
+    public static void sortFile() throws Exception {
         int i = 0;
-        BufferedReader bufferedReader;
-        BufferedWriter bufferedWriter;
-        FileWriter fileWriter;
-        Set<String> set;
-        String line;
-        
-        set = new TreeSet<>();
-        bufferedReader = new BufferedReader(new FileReader(new File("C:\\maratona.bin")));
-        line = bufferedReader.readLine();
-        
-        while (line != null) {
-            set.add(line);
+        FileInputStream fis = new FileInputStream(FILE_NAME);
+        FileOutputStream fos;
+        ObjectInputStream input = new ObjectInputStream(fis);
+        ObjectOutputStream fileWriter;
+        Set<Runner> set;
+        Runner line;
 
-            if (set.size() == 60000) {
-                FileWriter fw;
-                fw = new FileWriter(new File("C:\\temp-" + i + ".txt"));
-                for (String x : set) {
-                    fw.write(x);
-                    fw.write("\n");
-                }
-                fw.close();
-                i++;
-                set = new TreeSet<>();
+        set = new TreeSet<>(new ComparatorCode());
+        boolean cont = true;
+        while (cont) {
+            Runner obj = null;
+            try {
+                obj = (Runner) input.readObject();
+            } catch (Exception e) {
             }
-            line = bufferedReader.readLine();
+            if (obj != null) {
+                set.add(obj);
+                if (set.size() == 60000) {
+                    fos = new FileOutputStream(new File("C:\\temp-" + i + ".txt"));
+                    ObjectOutputStream writer = new ObjectOutputStream(fos);
+                    for (Runner x : set) {
+                        writer.writeObject(x);
+                    }
+                    writer.close();
+                    i++;
+                    set = new TreeSet<>(new ComparatorCode());
+                }
+            } else {
+                cont = false;
+            }
         }
 
-        bufferedReader.close();
-        bufferedReader = null;
-
-        fileWriter = new FileWriter(new File("C:\\temp-" + i + ".txt"));
-        for (String x : set) {
-            fileWriter.write(x);
-            fileWriter.write('\n');
+        fos = new FileOutputStream(new File("C:\\temp-" + i + ".txt"));
+        ObjectOutputStream writer = new ObjectOutputStream(fos);
+        for (Runner x : set) {
+            writer.writeObject(x);
         }
-        fileWriter.close();
+        writer.close();
+        fos.close();
 
-        Map<String, Integer> map = new TreeMap<>();
+        Map<Runner, Integer> map = new TreeMap<>(new ComparatorCode());
 
-        BufferedReader[] brArr = new BufferedReader[i + 1];
+//        BufferedReader[] brArr = new BufferedReader[i + 1];
+        InputStream[] in = new FileInputStream[i + 1];
+        ObjectInputStream[] oin = new ObjectInputStream[i + 1];
+
         for (int j = 0; j <= i; j++) {
-            brArr[j] = new BufferedReader(new FileReader(new File("C:\\temp-" + j + ".txt")));
-            map.put(brArr[j].readLine(), j);
+            in[j] = new FileInputStream(new File("C:\\temp-" + j + ".txt"));
+            oin[j] = new ObjectInputStream(in[j]);
+            map.put((Runner) oin[j].readObject(), j);
         }
 
-        bufferedWriter = new BufferedWriter(new FileWriter(new File("C:\\output.txt")));
+        fos = new FileOutputStream(new File("C:\\output.txt"));
+        writer = new ObjectOutputStream(fos);
 
-        String endofline = "\n";
         while (!map.isEmpty()) {
             line = map.keySet().iterator().next();
-            i = map.get(line);
             map.remove(line);
-            bufferedWriter.write(line);
-            bufferedWriter.write(endofline);
-            line = brArr[i].readLine();
+            writer.writeObject(line);
+            line = null;
+            try {
+                line = (Runner) oin[i].readObject();
+            } catch (Exception e) {
+            }
             if (line != null) {
                 map.put(line, i);
             }
         }
-        bufferedWriter.close();
+        writer.close();
+        fos.close();
 
-        for (int j = 0; j < brArr.length; j++) {
-            brArr[j].close();
+        for (int j = 0; j < in.length; j++) {
+            in[j].close();
             new File("C:\\temp-" + j + ".txt").delete();
         }
     }

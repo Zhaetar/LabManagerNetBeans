@@ -29,7 +29,7 @@ public class Main {
                 System.out.println("Gostaria de visualizar as informacoes das maratonas na tela? (1- Sim, 2- Nao)");
                 int verbose = getInt(0);
                 timeStart = new Date().getTime();
-                SN.generateFiles(quantity, verbose);
+                SN.generateFilesObject(quantity, verbose);
                 break;
             case 2:
                 timeStart = new Date().getTime();
@@ -37,7 +37,7 @@ public class Main {
                 int verbose2 = getInt(0);
                 System.out.println("Qual o tamanho do arquiv (em MB)?  (exemplo: 100 = 100MB)");
                 double fileSize = getInt(0);
-                SN.generateBigFile(verbose2, fileSize);
+                SN.generateBigFileObjects(verbose2, fileSize);
                 break;
             case 3:
                 timeStart = new Date().getTime();
@@ -46,7 +46,7 @@ public class Main {
                 SN.readBigFileIndexedObjects(indexType);
                 break;
             case 4:
-                SN.readBigFile();
+                SN.readObjects();
             case 0:
                 System.out.println("------------------------------------------------------");
                 System.out.println("Obrigado por utilizar o Nexus, tenha um otimo dia!");
