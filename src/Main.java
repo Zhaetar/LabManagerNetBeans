@@ -8,7 +8,7 @@ import java.util.Scanner;
  * @author Matheus Patrick
  */
 public class Main {
-    public static void init() throws IOException {
+    public static void init() throws IOException, Exception {
         System.out.println("------------------------------------------------------");
         System.out.println("Seja bem vindo ao Nexus! O que deseja fazer?");
         System.out.println("------------------------------------------------------");
@@ -43,10 +43,8 @@ public class Main {
                 timeStart = new Date().getTime();
                 System.out.println("Qual o tipo de organizacao que voce deseja utilizar? (1 - Codigo, 2 - Nome, 3 - Tempo de corrida, 4 - Data da Corrida)");
                 int indexType = getInt(1);
-                SN.readBigFileIndexedObjects(indexType);
+                SN.readObjects(indexType);
                 break;
-            case 4:
-                SN.readObjects();
             case 0:
                 System.out.println("------------------------------------------------------");
                 System.out.println("Obrigado por utilizar o Nexus, tenha um otimo dia!");
@@ -66,7 +64,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, Exception {
         init();
     }
 
