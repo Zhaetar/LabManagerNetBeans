@@ -14,9 +14,9 @@ import java.io.UnsupportedEncodingException;
  */
 public class LapManager {
 
-    final static String FILE_NAME = "D:\\maratona.bin";
-    final static String OUTPUT_FILE_NAME = "D:\\maratona_organizado.txt";
-    final static String TEMPORARY_FILE_NAME = "D:\\maratona_temporario_";
+    final static String FILE_NAME = "C:\\maratona.bin";
+    final static String OUTPUT_FILE_NAME = "C:\\maratona_organizado.txt";
+    final static String TEMPORARY_FILE_NAME = "C:\\maratona_temporario_";
 
     void generateFilesObject(int quantity, int verbose) throws IOException {
         FileOutputStream file = new FileOutputStream(FILE_NAME);
@@ -47,16 +47,18 @@ public class LapManager {
         FileOutputStream file = new FileOutputStream(fileLoc);
         ObjectOutputStream writer = new ObjectOutputStream(file);
         int counter = 0;
+        Runner runnerMan;
+        
         while (true) {
             for (int i = 0; i < 100; i++) {
-                Runner runnerMan = new Runner(Runner.getRandomCode(), Runner.getRandomName(), Runner.getRandomTime(), Runner.getRandomDate());
+                runnerMan = new Runner(Runner.getRandomCode(), Runner.getRandomName(), Runner.getRandomTime(), Runner.getRandomDate());
                 writer.writeObject(runnerMan);
             }
 
             // Verificar tamanho do arquivo
             if (++counter == 100) {
                 if (verbose == 1) {
-                    System.out.printf("Tamanho atual: %.3f GB%n", fileLoc.length() / 1e9);
+                    System.out.printf("Tamanho atual: %.3f GB%n \b\b\b\b\b\b\b\b\b\b\b", fileLoc.length() / 1e9);
                 }
                 if (fileLoc.length() >= fileSize * 1e9) {
                     writer.close();

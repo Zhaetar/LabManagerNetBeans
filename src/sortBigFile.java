@@ -114,5 +114,4 @@ public class sortBigFile {
             new File(LapManager.TEMPORARY_FILE_NAME + j + ".txt").delete();
         }
     }
-
 }
