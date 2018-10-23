@@ -1,4 +1,6 @@
 import java.io.Serializable;
+import java.sql.Time;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -8,12 +10,12 @@ import java.util.Random;
 public final class Runner implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    protected String code;
+    protected int code;
     protected String name;
-    protected String lapTime;
-    protected String lapDate;
+    protected Time lapTime;
+    protected Date lapDate;
 
-    public Runner(String code, String name, String lapDate, String lapTime) {
+    public Runner(int code, String name, Time lapTime, Date lapDate) {
         this.code = code;
         this.name = name;
         this.lapDate = lapDate;
@@ -28,44 +30,28 @@ public final class Runner implements Serializable {
         return (code + "," + name + "," + lapDate + "," + lapTime);
     }
 
-    public static String getRandomTime() {
+    public static Time getRandomTime() {
         Random rand = new Random();
 
-        int hours = rand.nextInt(6) + 1;
-        int minutes = rand.nextInt(60) + 1;
-        int seconds = rand.nextInt(60) + 1;
-        int mseconds = rand.nextInt(9) + 1;
-
-        return "0" + hours + ":" + minutes + ":" + seconds + ":" + mseconds;
+        final int millisInDay = 24*60*60*1000;
+        Time time = new Time((long)rand.nextInt(millisInDay));
+        
+        return time;
     }
 
-    public static String getRandomCode() {
+    public static int getRandomCode() {
         Random rand = new Random();
 
-        return Integer.toString(rand.nextInt(100000000) + 1);
+        return (rand.nextInt(100000000) + 1);
     }
 
-    public static String getRandomDate() {
+    public static Date getRandomDate() {
         Random rand = new Random();
+        long ms = -946771200000L + (Math.abs(rand.nextLong()) % (70L * 365 * 24 * 60 * 60 * 1000));
 
-        Integer day = rand.nextInt(28) + 1;
-        Integer month = rand.nextInt(12) + 1;
-        Integer year = 2020 - rand.nextInt(40) + 1;
-
-        String dayString, monthString;
-        if (day < 10) {
-            dayString = "0" + day.toString();
-        } else {
-            dayString = day.toString();
-        }
-
-        if (month < 10) {
-            monthString = "0" + month.toString();
-        } else {
-            monthString = month.toString();
-        }
-
-        return dayString + "/" + monthString + "/" + year;
+        // Construct a date
+        Date dt = new Date(ms);
+        return dt;
     }
 
     public static String getRandomName() {
@@ -83,11 +69,11 @@ public final class Runner implements Serializable {
         return name;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
@@ -99,19 +85,19 @@ public final class Runner implements Serializable {
         this.name = name;
     }
 
-    public String getLapTime() {
+    public Time getLapTime() {
         return lapTime;
     }
 
-    public void setLapTime(String lapTime) {
+    public void setLapTime(Time lapTime) {
         this.lapTime = lapTime;
     }
 
-    public String getLapDate() {
+    public Date getLapDate() {
         return lapDate;
     }
 
-    public void setLapDate(String lapDate) {
+    public void setLapDate(Date lapDate) {
         this.lapDate = lapDate;
     }
 

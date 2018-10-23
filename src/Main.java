@@ -8,6 +8,7 @@ import java.util.Scanner;
  * @author Matheus Patrick
  */
 public class Main {
+
     public static void init() throws IOException, Exception {
         System.out.println("------------------------------------------------------");
         System.out.println("Seja bem vindo ao Nexus! O que deseja fazer?");

@@ -29,7 +29,7 @@ public class sortBigFile {
         Set<Runner> set;
         Runner line;
         Comparator comparator;
-
+        
         // Tipo de comparador
         switch (indexType) {
             default:
@@ -64,7 +64,7 @@ public class sortBigFile {
                     }
                     writer.close();
                     i++;
-                    set = new TreeSet<>(new ComparatorCode());
+                    set = new TreeSet<>(comparator);
                 }
             } else {
                 cont = false;
@@ -79,7 +79,7 @@ public class sortBigFile {
         writer.close();
         fos.close();
 
-        Map<Runner, Integer> map = new TreeMap<>(new ComparatorCode());
+        Map<Runner, Integer> map = new TreeMap<>(comparator);
 
         InputStream[] in = new FileInputStream[i + 1];
         ObjectInputStream[] oin = new ObjectInputStream[i + 1];
@@ -100,7 +100,7 @@ public class sortBigFile {
             line = null;
             try {
                 line = (Runner) oin[i].readObject();
-            } catch (Exception e) {
+            } catch (IOException | ClassNotFoundException e) {
             }
             if (line != null) {
                 map.put(line, i);
